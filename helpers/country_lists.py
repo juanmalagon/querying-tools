@@ -114,7 +114,6 @@ non_weird_countries = [country for country in countries
                        if country not in weird_countries]
 non_weird_demonyms = [demonym for demonym in demonyms
                       if demonym not in weird_demonyms]
-
 stemmed = ["Afghan*", "Alban*", "Alger*", "Andorr*", "Angol*",
            "Antigu* and Barbud*", "Argentin*", "Armen*", "Austral*",
            "Austri*", "Azerbaijan*", "Baham*", "Bahrain*", "Banglades*",

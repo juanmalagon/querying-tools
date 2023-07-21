@@ -21,7 +21,7 @@ class Handler:
                 var = fallback
         return var
 
-    run_date: str = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+    run_date: str = datetime.today().strftime('%Y_%m_%d_%H_%M_%S')
     run_serial: str = str(uuid4())
 
     def __init__(self):
@@ -35,11 +35,14 @@ class Handler:
         self.project_dir = Handler.get_environment_var('project_dir', None)
         self.scopus_config_file = Handler.get_environment_var(
             'scopus_config_file', None)
+        self.scopus_data_dir = Handler.get_environment_var(
+            'scopus_data_dir', None)
 
         # Collect environment variables
         env_variables_list = {
             'project_dir': self.project_dir,
-            'scopus_config_file': self.scopus_config_file
+            'scopus_config_file': self.scopus_config_file,
+            'scopus_data_dir': self.scopus_data_dir
             }
 
         # Print environment variables
