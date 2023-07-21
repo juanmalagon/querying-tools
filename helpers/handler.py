@@ -1,5 +1,5 @@
 from datetime import datetime
-from os import environ, chdir
+from os import environ
 from uuid import uuid4
 import logging
 
@@ -46,8 +46,3 @@ class Handler:
         logging.info('Environment variables:')
         for key, value in env_variables_list.items():
             logging.info(f'{key}: {value}')
-
-        # Change working directory
-        if self.project_dir is not None:
-            chdir(self.project_dir)
-            logging.info(f'Changed working directory to {self.project_dir}')

@@ -6,5 +6,5 @@ os.environ['scopus_config_file'] = os.path.join(
     os.getenv('project_dir'),
     'scopus/config.json'
     )
-
+# Change working directory
 os.chdir(os.getenv('project_dir'))
