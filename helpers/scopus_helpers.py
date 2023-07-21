@@ -40,6 +40,7 @@ def convert_results_to_dataframe(results: list,
         logging.info(f'Results not converted to dataframe\
                       (column names: {results_df.columns})')
         results_df = pd.DataFrame(columns=selected_columns)
+    logging.info(f'{len(results_df)} results converted to dataframe.')
     return results_df
 
 
@@ -74,7 +75,8 @@ def apply_further_transformations(
         df_copy = df_copy[df_copy['prism:coverDate'] < max_date]
     df_copy.drop_duplicates(subset=['dc:identifier'], inplace=True)
     df_copy.reset_index(drop=True, inplace=True)
-    return df
+    logging.info('Further transformations applied to dataframe.')
+    return df_copy
 
 
 def retrieve_results_from_list_of_queries(
@@ -101,4 +103,6 @@ def retrieve_results_from_list_of_queries(
     results_df.to_csv(
         f'{h.scopus_data_dir}/{file_name}-{h.run_date}-{h.run_serial}.csv',
         index=False)
+    logging.info(
+        f'Results saved to {file_name}-{h.run_date}-{h.run_serial}.csv')
     return results_df
