@@ -20,7 +20,7 @@ def scopus_query_list_constructor(initial_query: str,
 # https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl
 
 # Step 0: initial query
-mergoni_scopus_query = 'ALL({data envelopment analysis})' +\
+mergoni_scopus_step_0_query = 'ALL({data envelopment analysis})' +\
   ' AND ALL({policy evaluation})' +\
   ' AND PUBYEAR > 1956' +\
   ' AND PUBYEAR < 2022' +\
@@ -35,32 +35,42 @@ mergoni_scopus_step_1_query = 'ALL({data envelopment analysis})' +\
   ' AND SRCTYPE(j)'
 
 # Step 2: assess country and demonyms prevalence
-#   Queries for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
-#   countries
+#
+# Queries for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
+# countries
+#
 mergoni_scopus_step_2_queries__weird_countries = scopus_query_list_constructor(
-    mergoni_scopus_query, cl.weird_countries, step=20,
+    mergoni_scopus_step_0_query, cl.weird_countries, step=20,
     search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries__weird_demonyms = scopus_query_list_constructor(
-    mergoni_scopus_query, cl.weird_demonyms, step=20,
+    mergoni_scopus_step_0_query, cl.weird_demonyms, step=20,
     search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries_weird =\
   mergoni_scopus_step_2_queries__weird_countries +\
   mergoni_scopus_step_2_queries__weird_demonyms
+#
 #   Queries for non-WEIRD countries
+#
 mergoni_scopus_step_2_queries__non_weird_countries =\
-    scopus_query_list_constructor(mergoni_scopus_query, cl.non_weird_countries,
+    scopus_query_list_constructor(mergoni_scopus_step_0_query,
+                                  cl.non_weird_countries,
                                   step=20, search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries__non_weird_demonyms =\
-    scopus_query_list_constructor(mergoni_scopus_query, cl.non_weird_demonyms,
+    scopus_query_list_constructor(mergoni_scopus_step_0_query,
+                                  cl.non_weird_demonyms,
                                   step=20, search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries_non_weird =\
     mergoni_scopus_step_2_queries__non_weird_countries +\
     mergoni_scopus_step_2_queries__non_weird_demonyms
+#
 #   Queries for Latin American and Caribbean (LAC) countries
+#
 mergoni_scopus_step_2_queries__lac_countries = scopus_query_list_constructor(
-    mergoni_scopus_query, cl.lac_countries, step=20, search_field='TITLE-ABS')
+    mergoni_scopus_step_0_query, cl.lac_countries, step=20,
+    search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries__lac_demonyms = scopus_query_list_constructor(
-    mergoni_scopus_query, cl.lac_demonyms, step=20, search_field='TITLE-ABS')
+    mergoni_scopus_step_0_query, cl.lac_demonyms, step=20,
+    search_field='TITLE-ABS')
 mergoni_scopus_step_2_queries_lac =\
   mergoni_scopus_step_2_queries__lac_countries +\
   mergoni_scopus_step_2_queries__lac_demonyms

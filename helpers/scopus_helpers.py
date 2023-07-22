@@ -81,7 +81,6 @@ def apply_further_transformations(
 
 def retrieve_results_from_list_of_queries(
         list_of_queries: list[str],
-        file_name: str,
         max_date: str,
         ) -> pd.DataFrame:
     """Retrieve results from list of queries."""
@@ -100,9 +99,22 @@ def retrieve_results_from_list_of_queries(
     results_df = apply_further_transformations(
         results_df,
         max_date=max_date)
-    results_df.to_csv(
-        f'{h.scopus_data_dir}/{file_name}-{h.run_date}-{h.run_serial}.csv',
-        index=False)
     logging.info(
-        f'Results saved to {file_name}-{h.run_date}-{h.run_serial}.csv')
+        f'{len(results_df)} results retrieved from the list of queries.')
     return results_df
+
+
+def export_to_csv(df: pd.DataFrame, file_name: str) -> None:
+    """Export dataframe to csv."""
+    logging.info(f'Exporting dataframe to csv: {file_name}')
+    file_name_extended = file_name + '-' + h.run_date + '-' + h.run_serial
+    df['run_date'] = h.run_date
+    df['run_serial'] = h.run_serial
+    df.to_csv(
+        path_or_buf=h.scopus_data_dir + file_name_extended + '.csv',
+        sep=',',
+        index=False,
+        encoding='utf-8'
+        )
+    logging.info(f'Dataframe exported to csv: {file_name_extended}')
+    return None

@@ -37,12 +37,14 @@ class Handler:
             'scopus_config_file', None)
         self.scopus_data_dir = Handler.get_environment_var(
             'scopus_data_dir', None)
+        self.save_to_csv = Handler.get_environment_var('save_to_csv', 0)
 
         # Collect environment variables
         env_variables_list = {
             'project_dir': self.project_dir,
             'scopus_config_file': self.scopus_config_file,
-            'scopus_data_dir': self.scopus_data_dir
+            'scopus_data_dir': self.scopus_data_dir,
+            'save_to_csv': self.save_to_csv
             }
 
         # Print environment variables
