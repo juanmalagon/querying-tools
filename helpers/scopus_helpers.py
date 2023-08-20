@@ -14,7 +14,7 @@ con_file = open(h.scopus_config_file)
 config = json.load(con_file)
 con_file.close()
 
-# Initialize client
+# Initialize Elsevier client
 client = ElsClient(config['apikey'])
 
 # Define selected columns
@@ -34,18 +34,20 @@ def convert_results_to_dataframe(results: list,
         results_df = results_df[selected_columns]
         results_df = results_df.drop_duplicates(subset=['dc:identifier'])
         results_df = results_df.reset_index(drop=True)
-        logging.info(f'''Number of deduplicated results stored in dataframe:
-                     {len(results_df)}''')
+        logging.info(
+            f'Deduplicated results stored in dataframe: {len(results_df)}')
     except KeyError:
-        logging.info(f'Results not converted to dataframe\
-                      (column names: {results_df.columns})')
+        logging.info(
+            f'Columns not converted to dataframe: {results_df.columns})')
         results_df = pd.DataFrame(columns=selected_columns)
     logging.info(f'{len(results_df)} results converted to dataframe.')
     return results_df
 
 
 def retrieve_results_from_query(query: str) -> pd.DataFrame:
-    """Retrieve results from Scopus API."""
+    """
+    Retrieve results from query.
+    """
     logging.info(f'Retrieving results from Scopus API for query: {query}')
     # Initialize document search object and execute search
     doc_srch = ElsSearch(query, 'scopus')
@@ -66,7 +68,13 @@ def apply_further_transformations(
         df: pd.DataFrame,
         max_date: str = None,
         ) -> pd.DataFrame:
-    """Apply further transformations to dataframe."""
+    """
+    Apply further transformations to dataframe:
+    - add column 'localization_in_title' (boolean)
+    - filter by max_date
+    - drop duplicates
+    - reset index
+    """
     logging.info('Applying further transformations to dataframe.')
     df_copy = df.copy()
     df_copy['localization_in_title'] = df['dc:title'].str.contains(
@@ -83,7 +91,9 @@ def retrieve_results_from_list_of_queries(
         list_of_queries: list[str],
         max_date: str,
         ) -> pd.DataFrame:
-    """Retrieve results from list of queries."""
+    """
+    Retrieve results from list of queries and concatenate them.
+    """
     logging.info(f'Retrieving results from {len(list_of_queries)} queries.')
     results_dfs = []
     for query in list_of_queries:
@@ -94,8 +104,7 @@ def retrieve_results_from_list_of_queries(
     results_df = results_df.drop_duplicates(subset=['dc:identifier'])
     results_df = results_df.reset_index(drop=True)
     logging.info(
-        f'''Number of deduplicated results in concatenated dataframe:
-        {len(results_df)}''')
+        f'Deduplicated results in concatenated dataframe: {len(results_df)}')
     results_df = apply_further_transformations(
         results_df,
         max_date=max_date)

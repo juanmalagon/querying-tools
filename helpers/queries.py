@@ -1,10 +1,28 @@
 from helpers import country_lists as cl
 
+# Scopus
+# For help on using the Scopus Search API, see:
+# https://dev.elsevier.com/documentation/ScopusSearchAPI
+
 
 def scopus_query_list_constructor(initial_query: str,
                                   long_list: list[str],
                                   search_field: str = 'ALL',
                                   step: int = 20):
+    """
+    Constructs a list of queries for the Scopus Search API. This process
+    is necessary because the Scopus Search API only allows queries with
+    limited length. We use it to construct a list of queries that will
+    look for country names and demonyms in search fields.
+    - The initial_query is a string that will be used as the first part of
+    each query.
+    - The long_list is a list of strings that will be used as the
+    second part of each query.
+    - The search_field is the field in which the second part of the query
+    will be searched.
+    - The step is the number of elements of the long list that will be
+    included in each query.
+    """
     list_of_queries = []
     for i in range(0, len(long_list), step):
         list_of_queries.append(
@@ -15,11 +33,7 @@ def scopus_query_list_constructor(initial_query: str,
     return list_of_queries
 
 
-# Scopus
-# For help on using the Scopus Search API, see:
-# https://dev.elsevier.com/documentation/ScopusSearchAPI.wadl
-
-# Step 0: initial query
+# Step 0: initial query by the authors
 mergoni_scopus_step_0_query = 'ALL({data envelopment analysis})' +\
   ' AND ALL({policy evaluation})' +\
   ' AND PUBYEAR > 1956' +\
@@ -27,18 +41,18 @@ mergoni_scopus_step_0_query = 'ALL({data envelopment analysis})' +\
   ' AND LANGUAGE(english)' +\
   ' AND SRCTYPE(j)'
 
-# Step 1: remove language restriction
+# Step 1: initial query after removing the language restriction
 mergoni_scopus_step_1_query = 'ALL({data envelopment analysis})' +\
   ' AND ALL({policy evaluation})' +\
   ' AND PUBYEAR > 1956' +\
   ' AND PUBYEAR < 2022' +\
   ' AND SRCTYPE(j)'
 
-# Step 2: assess country and demonyms prevalence
-#
+# Step 2: queries including country names and demonyms
+
 # Queries for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
 # countries
-#
+
 mergoni_scopus_step_2_queries__weird_countries = scopus_query_list_constructor(
     mergoni_scopus_step_0_query, cl.weird_countries, step=20,
     search_field='TITLE-ABS')

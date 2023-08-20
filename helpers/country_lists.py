@@ -1,3 +1,5 @@
+# Lists for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
+# countries
 weird_countries = ["United States", "USA", "Canada", "United Kingdom", "UK",
                    "Ireland", "Australia", "New Zealand", "Germany", "France",
                    "Netherlands", "Belgium", "Luxembourg", "Switzerland",
@@ -7,6 +9,8 @@ weird_demonyms = ["American", "Canadian", "British", "Irish", "Australian",
                   "New Zealander", "German", "French", "Dutch", "Belgian",
                   "Luxembourger", "Swiss", "Austrian", "Danish", "Norwegian",
                   "Swedish", "Finnish", "Icelandic"]
+
+# Lists for Latin American and Caribbean (LAC) countries
 lac_countries = ["Argentina", "Bolivia", "Brazil", "Chile", "Colombia",
                  "Costa Rica", "Cuba", "Dominican Republic", "Ecuador",
                  "El Salvador", "Guatemala", "Haiti", "Honduras", "Jamaica",
@@ -18,6 +22,8 @@ lac_demonyms = ["Argentinian", "Argentine", "Bolivian", "Brazilian", "Chilean",
                 "Honduran", "Jamaican", "Mexican", "Nicaraguan", "Panamanian",
                 "Paraguayan", "Peruvian", "Puerto Rican", "Uruguayan",
                 "Venezuelan"]
+
+# Lists for all countries
 countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
              "Antigua and Barbuda", "Argentina", "Armenia", "Australia",
              "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh",
@@ -27,9 +33,9 @@ countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
              "Cambodia", "Cameroon", "Canada", "Central African Republic",
              "Chad", "Chile", "China", "Colombia", "Comoros", "Congo",
              "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic",
-             "Czechia",
-             "Denmark", "Djibouti", "Dominica", "Dominican Republic",
-             "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea",
+             "Czechia", "Denmark", "Djibouti", "Dominica",
+             "Dominican Republic", "Ecuador", "Egypt", "El Salvador",
+             "Equatorial Guinea", "Eritrea",
              "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
              "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece",
              "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
@@ -65,6 +71,7 @@ countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
              "Uruguay", "Uzbekistan", "Vanuatu",
              "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia",
              "Zimbabwe"]
+
 demonyms = ["Afghan", "Albanian", "Algerian", "Andorran", "Angolan",
             "Antiguan and Barbudan", "Argentinian",
             "Argentine",
@@ -110,10 +117,14 @@ demonyms = ["Afghan", "Albanian", "Algerian", "Andorran", "Angolan",
             "Tuvaluan", "Ugandan", "Ukrainian", "Emirian", "British",
             "American", "Uruguayan", "Uzbekistani", "Ni-Vanuatu", "Vatican",
             "Venezuelan", "Vietnamese", "Yemenite", "Zambian", "Zimbabwean"]
+
+# Lists for non-WEIRD countries
 non_weird_countries = [country for country in countries
                        if country not in weird_countries]
 non_weird_demonyms = [demonym for demonym in demonyms
                       if demonym not in weird_demonyms]
+
+# Lists for all countries' names stemmed
 stemmed = ["Afghan*", "Alban*", "Alger*", "Andorr*", "Angol*",
            "Antigu* and Barbud*", "Argentin*", "Armen*", "Austral*",
            "Austri*", "Azerbaijan*", "Baham*", "Bahrain*", "Banglades*",
