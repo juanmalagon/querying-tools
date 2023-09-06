@@ -21,7 +21,7 @@ client = ElsClient(config['apikey'])
 selected_columns = [
     'dc:identifier', 'dc:title', 'dc:creator', 'prism:publicationName',
     'prism:coverDate', 'prism:aggregationType', 'subtypeDescription',
-    'prism:doi', 'eid']
+    'prism:doi', 'eid', 'openaccess']
 
 
 def convert_results_to_dataframe(results: list,
@@ -55,6 +55,7 @@ def retrieve_results_from_query(query: str) -> pd.DataFrame:
     # Retrieve results
     results = doc_srch.results
     logging.info(f'{len(results)} results retrieved from Scopus API.')
+
     results_df = convert_results_to_dataframe(results)
     if len(results_df) > 0:
         results_df['localization_in_title_or_abstract'] = 'TITLE-ABS' in query

@@ -62,9 +62,9 @@ mergoni_scopus_step_2_queries__weird_demonyms = scopus_query_list_constructor(
 mergoni_scopus_step_2_queries_weird =\
   mergoni_scopus_step_2_queries__weird_countries +\
   mergoni_scopus_step_2_queries__weird_demonyms
-#
-#   Queries for non-WEIRD countries
-#
+
+# Queries for non-WEIRD countries
+
 mergoni_scopus_step_2_queries__non_weird_countries =\
     scopus_query_list_constructor(mergoni_scopus_step_0_query,
                                   cl.non_weird_countries,
@@ -76,9 +76,9 @@ mergoni_scopus_step_2_queries__non_weird_demonyms =\
 mergoni_scopus_step_2_queries_non_weird =\
     mergoni_scopus_step_2_queries__non_weird_countries +\
     mergoni_scopus_step_2_queries__non_weird_demonyms
-#
-#   Queries for Latin American and Caribbean (LAC) countries
-#
+
+# Queries for Latin American and Caribbean (LAC) countries
+
 mergoni_scopus_step_2_queries__lac_countries = scopus_query_list_constructor(
     mergoni_scopus_step_0_query, cl.lac_countries, step=20,
     search_field='TITLE-ABS')
