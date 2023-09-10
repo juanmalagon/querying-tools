@@ -4,6 +4,9 @@ from uuid import uuid4
 import logging
 
 
+module_logger = logging.getLogger('main.helpers.handler')
+
+
 class Handler:
     @staticmethod
     def get_environment_var(env, fallback):
@@ -13,7 +16,7 @@ class Handler:
                 var = int(var)
         except (KeyError, ValueError):
             if fallback is None:
-                logging.error(
+                module_logger.error(
                     f"The required environment variable '{env}' is not set \
                         and has not got a fallback value.")
                 raise
@@ -25,11 +28,13 @@ class Handler:
     run_serial: str = str(uuid4())
 
     def __init__(self):
+        # Initialize logger
+        self.logger = logging.getLogger('main.helpers.handler.Handler')
 
         # Print initialization message
-        logging.info('Initializing handler')
-        logging.info(f'Run date: {self.run_date}')
-        logging.info(f'Run serial: {self.run_serial}')
+        self.logger.info('Initializing handler')
+        self.logger.info(f'Run date: {self.run_date}')
+        self.logger.info(f'Run serial: {self.run_serial}')
 
         # Define environment variables
         self.project_dir = Handler.get_environment_var('project_dir', None)
@@ -48,6 +53,6 @@ class Handler:
             }
 
         # Print environment variables
-        logging.info('Environment variables:')
+        self.logger.info('Environment variables:')
         for key, value in env_variables_list.items():
-            logging.info(f'{key}: {value}')
+            self.logger.info(f'{key}: {value}')
