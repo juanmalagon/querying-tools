@@ -1,42 +1,13 @@
 import logging
 
-from helpers import country_lists as cl
+from utils import country_lists as cl
+from utils.functions import scopus_query_list_constructor
 
 # Scopus
 # For help on using the Scopus Search API, see:
 # https://dev.elsevier.com/documentation/ScopusSearchAPI
 
-
-module_logger = logging.getLogger('main.helpers.queries')
-
-
-def scopus_query_list_constructor(initial_query: str,
-                                  long_list: list[str],
-                                  search_field: str = 'ALL',
-                                  step: int = 20):
-    """
-    Constructs a list of queries for the Scopus Search API. This process
-    is necessary because the Scopus Search API only allows queries with
-    limited length. We use it to construct a list of queries that will
-    look for country names and demonyms in search fields.
-    - The initial_query is a string that will be used as the first part of
-    each query.
-    - The long_list is a list of strings that will be used as the
-    second part of each query.
-    - The search_field is the field in which the second part of the query
-    will be searched.
-    - The step is the number of elements of the long list that will be
-    included in each query.
-    """
-    list_of_queries = []
-    for i in range(0, len(long_list), step):
-        list_of_queries.append(
-            initial_query + ' AND ' + search_field + '({' +
-            '} OR {'.join(long_list[i:i+step]) +
-            '})'
-            )
-    return list_of_queries
-
+module_logger = logging.getLogger('main.utils.queries')
 
 # Original query by the authors
 mergoni_scopus_original_query = 'ALL({data envelopment analysis})' +\

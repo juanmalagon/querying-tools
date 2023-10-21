@@ -1,4 +1,4 @@
-from helpers.handler import Handler
+from utils.handler import Handler
 
 # Create handler
 handler = Handler()
