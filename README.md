@@ -15,8 +15,10 @@ Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility 
         "apikey": "your_api_key_goes_here"
     }
     ```
-    (See also
+    (See also:
+
     Elsevier Developer Portal API Authentication docs https://dev.elsevier.com/tecdoc_api_authentication.html
+    
     API Interface Specification https://dev.elsevier.com/documentation/AuthenticationAPI)
 
 4. Store your `config.json` file at the `/scopus/` folder
