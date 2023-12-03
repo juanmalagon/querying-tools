@@ -1,7 +1,7 @@
 # unbiased-request
 Repository accompanying the paper:
 
-_Malagon J, Haelermans C. Reading between the lines: biases and reproducibility challenges in efficiency of education reviews. 2023_
+Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility challenges in efficiency of education reviews. 2023_
 
 ### Instructions
 1. On Python 3.11+ install the requirements:
