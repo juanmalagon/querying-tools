@@ -4,7 +4,7 @@ from uuid import uuid4
 import logging
 
 
-module_logger = logging.getLogger('main.helpers.handler')
+module_logger = logging.getLogger('main.utils.handler')
 
 
 class Handler:
@@ -29,7 +29,7 @@ class Handler:
 
     def __init__(self):
         # Initialize logger
-        self.logger = logging.getLogger('main.helpers.handler.Handler')
+        self.logger = logging.getLogger('main.utils.handler.Handler')
 
         # Print initialization message
         self.logger.info('Initializing handler')
