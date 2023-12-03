@@ -8,10 +8,14 @@ from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch
 
 
+exec(open("env_variables.py").read())
 module_logger = logging.getLogger("main.resources.scopus_functions")
 
 
 def get_environment_var(env, fallback):
+    """
+    Get environment variable or fallback value.
+    """
     try:
         var = os.environ[env]
         if isinstance(fallback, int):
@@ -59,18 +63,22 @@ def scopus_query_list_constructor(
     step: int = 20
 ):
     """
-    Constructs a list of queries for the Scopus Search API. This process
-    is necessary because the Scopus Search API only allows queries with
-    limited length. We use it to construct a list of queries that will
-    look for country names and demonyms in search fields.
-    - The initial_query is a string that will be used as the first part of
+    Constructs a list of queries for the Scopus Search API. This process is
+    necessary because the Scopus Search API limits the lenght of the query
+    strings it accepts.
+    Hence, if we need to look for a multiple terms within a field (e.g., when
+    looking for country names and demonyms in the title, abstract or keywords
+    field) we need to split the list of terms into smaller lists and construct
+    a query for each of them.
+
+    - initial_query is a fixed string that will be used as the first part of
     each query.
-    - The long_list is a list of strings that will be used as the
-    second part of each query.
-    - The search_field is the field in which the second part of the query
-    will be searched.
-    - The step is the number of elements of the long list that will be
-    included in each query.
+    - long_list is a list of strings that will be used as the second part of
+    each query.
+    - search_field is the field in which the second part of the query will be
+    searched.
+    - step is the number of elements of the long list that will be included in
+    each query.
     """
     list_of_queries = []
     for i in range(0, len(long_list), step):
