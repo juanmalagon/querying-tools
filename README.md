@@ -16,6 +16,7 @@ _Malagon J, Haelermans C. Reading between the lines: biases and reproducibility 
 (See also
 Elsevier Developer Portal API Authentication docs https://dev.elsevier.com/tecdoc_api_authentication.html
 API Interface Specification https://dev.elsevier.com/documentation/AuthenticationAPI)
+
 4. Store your `config.json` file at the `/scopus/` folder
 5. Open `env_variables.py` and change `project_dir` to your current project directory
 6. Open a terminal and run
