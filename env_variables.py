@@ -5,7 +5,7 @@ import os
 # Change 'project_dir' to your project directory
 os.environ['project_dir'] = '/Users/juanmalagon/repos/unbiased-request'
 
-# Change 'scopus_config_file' to your Scopus config file. See:
+# Change 'scopus_config_file' to your Scopus config file location. See:
 # https://dev.elsevier.com/documentation/AuthenticationAPI
 os.environ['scopus_config_file'] = os.path.join(
     os.getenv('project_dir'), 'scopus/config.json')

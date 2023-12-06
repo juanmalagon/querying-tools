@@ -15,7 +15,7 @@ def language_bias_helper(query: str) -> str:
 
 def publication_bias_helper(query: str) -> str:
     """
-    Returns a query without the language restriction.
+    Returns a query without the souce type restriction.
     """
     return re.sub(r"(AND\s)*SRCTYPE\(\w+\)", "", query)
 
