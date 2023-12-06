@@ -43,31 +43,30 @@ st.markdown(
     your original query with the results from queries without language and
     publication bias.
 
-    ## How to use it
+    ### How to use it
 
-    1. Insert your original query in the first text box (for help on how to
+    1. Insert your original query string in the first text box and a maximum
+    date for extra filtering in the second text box (for help on how to
     create your query string see <a
-    href="https://dev.elsevier.com/sc_search_tips.html">Scopus search tips </a>
-    and <a href="https://dev.elsevier.com/documentation/ScopusSearchAPI">Scopus
-    Search API</a>).
-    2. Insert a maximum date for extra filtering (optional).
-    3. If you want to load an example query and maximum date for extra
+    href="https://dev.elsevier.com/sc_search_tips.html">Scopus search tips
+    </a>). If you prefer to load an example query and maximum date for extra
     filtering, check the box below.
-    4. Click on the checkbox "Retrieve data from your original query".
-    5. Click on the checkbox "Apply language-bias-helper and retrieve data
-    from your query".
-    6. Click on the checkbox "Apply publication-bias-helper and retrieve data
-    from your query".
+    3. Click on the checkbox "Retrieve data from your original query" to
+    retrieve data from your original query.
+    4. Click on the checkbox "Apply language-bias-helper" to retrieve data from
+    your original query without language bias.
+    5. Click on the checkbox "Apply publication-bias-helper" to retrieve data
+    from your original query without publication bias.
     """,
     unsafe_allow_html=True,
 )
-# st.write("Unbiased Requester - SCOPUS")
-# st.write("This app allows you to retrieve data from Scopus and compare the \
-#     results from your original query with the results from queries without \
-#         language and publication bias.")
 
-# "st.session_state object:", st.session_state
-
+st.markdown(
+    """
+    ### Retrieve data
+    """,
+    unsafe_allow_html=True,
+)
 st.text_input("Insert your original query", key="original_query")
 st.text_input("Insert a maximum date for extra filtering (optional)",
               key="max_date")
@@ -81,8 +80,10 @@ if st.checkbox("Load an example query and maximum date for extra filtering \
     st.session_state.original_query = mergoni_2021_scopus_query
     st.session_state.max_date = max_date
 
-"This is your original query: ", st.session_state.original_query
-"This is your maximum date for extra filtering:", st.session_state.max_date
+"This is your original query:"
+st.session_state.original_query
+"This is your maximum date for extra filtering:"
+st.session_state.max_date
 
 
 @st.cache_data
@@ -103,9 +104,9 @@ if st.checkbox("Retrieve data from your original query"
     data_load_state.text(
         f"Data loaded! Retrieved {len(data_original)} results.")
 
-    if st.checkbox("Show original data head"):
-        st.write("Original query data head")
-        st.write(data_original.head(5))
+    if st.checkbox("Show original data"):
+        st.write("Original query data")
+        st.write(data_original)
 
 st.session_state.lang_bias_query = language_bias_helper(
     st.session_state.original_query)
@@ -116,28 +117,32 @@ st.session_state.pub_bias_query = publication_bias_helper(
 # st.write("This is your query without language bias:")
 # st.session_state.lang_bias_query
 
-if st.checkbox("Apply language-bias-helper and retrieve data from your query"):
+if st.checkbox("Apply language-bias-helper"):
     data_load_state = st.text(
         "Loading data for your query... This may take a few minutes")
     data_lang = load_data(
         st.session_state.lang_bias_query, st.session_state.max_date)
-    data_load_state.text(f"Data loaded! Retrieved {len(data_lang)} results.")
-
-    if st.checkbox("Show language-bias-helper data head"):
-        st.write("Language-bias-helper data head")
-        st.write(data_lang.head(5))
+    data_load_state.text(f"Data loaded! Retrieved {len(data_lang)} results")
+    if st.checkbox("Show language-bias-helper extra records"):
+        data_lang_diff = data_lang[
+            ~data_lang['dc:identifier'].isin(
+                data_original['dc:identifier'])].reset_index(drop=True)
+        st.write("Language-bias-helper data")
+        st.write(data_lang_diff)
 
 # st.write("This is your query without publication bias:")
 # st.session_state.pub_bias_query
 
-if st.checkbox("Apply publication-bias-helper and retrieve data from your\
-                query"):
+if st.checkbox("Apply publication-bias-helper"):
     data_load_state = st.text(
         "Loading data for your query... This may take a few minutes")
     data_pub = load_data(
         st.session_state.pub_bias_query, st.session_state.max_date)
     data_load_state.text(f"Data loaded! Retrieved {len(data_pub)} results.")
 
-    if st.checkbox("Show publication-bias-helper data head"):
-        st.write("Publication-bias-helper data head")
-        st.write(data_pub.head(5))
+    if st.checkbox("Show publication-bias-helper data extra records"):
+        data_pub_diff = data_pub[
+            ~data_pub['dc:identifier'].isin(
+                data_original['dc:identifier'])].reset_index(drop=True)
+        st.write("Publication-bias-helper data")
+        st.write(data_pub_diff)
