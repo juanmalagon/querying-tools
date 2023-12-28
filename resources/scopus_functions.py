@@ -2,7 +2,7 @@ import json
 import pandas as pd
 import logging
 import os
-from resources.helper_tools import determine_localization_in_title
+from resources.querying_tools import determine_localization_in_title
 
 from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch

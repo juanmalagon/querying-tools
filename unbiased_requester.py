@@ -1,5 +1,5 @@
 from resources.examples import mergoni_2021_scopus_query, max_date
-from resources.helper_tools import (
+from resources.querying_tools import (
     language_bias_helper,
     publication_bias_helper,
 )

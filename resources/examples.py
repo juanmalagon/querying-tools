@@ -1,6 +1,6 @@
 # Example queries
 
-# Recreation of the queries documented by various authors of literature
+# Recreation of the queries documented by various literature
 # reviews on efficiency of education
 
 mergoni_2021_scopus_query = (
