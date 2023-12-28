@@ -1,7 +1,7 @@
 from resources.examples import mergoni_2021_scopus_query, max_date
 from resources.querying_tools import (
-    language_bias_helper,
-    publication_bias_helper,
+    language_bias_tool,
+    publication_bias_tool,
 )
 from resources.scopus_functions import (
     retrieve_results_from_list_of_queries,
@@ -108,9 +108,9 @@ if st.checkbox("Retrieve data from your original query"
         st.write("Original query data")
         st.write(data_original)
 
-st.session_state.lang_bias_query = language_bias_helper(
+st.session_state.lang_bias_query = language_bias_tool(
     st.session_state.original_query)
-st.session_state.pub_bias_query = publication_bias_helper(
+st.session_state.pub_bias_query = publication_bias_tool(
     st.session_state.original_query
 )
 

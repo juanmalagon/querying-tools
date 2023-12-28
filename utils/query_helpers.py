@@ -16,14 +16,14 @@ from utils import examples as ex
 module_logger = logging.getLogger("main.utils.query_helpers")
 
 
-def language_bias_helper(query: str) -> str:
+def language_bias_tool(query: str) -> str:
     """
     Returns a query without the language restriction.
     """
     return re.sub(r"(AND\s)*LANGUAGE\(\w+\)", "", query)
 
 
-def publication_bias_helper(query: str) -> str:
+def publication_bias_tool(query: str) -> str:
     """
     Returns a query without the language restriction.
     """
@@ -58,7 +58,7 @@ def determine_localization_in_title(
 # scopus_original_query = ex.mergoni_2021_scopus_query
 
 # # Language-bias-helper: initial query after removing the language restriction
-# scopus_lang_bias_helper_query = language_bias_helper(scopus_original_query)
+# scopus_lang_bias_helper_query = language_bias_tool(scopus_original_query)
 
 # # Localization-bias-helper: queries including country names and demonyms
 # # Queries for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
