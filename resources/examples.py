@@ -12,7 +12,7 @@ mergoni_2021_scopus_query = (
     + " AND SRCTYPE(j)"
 )
 
-max_date = "2021-02-01"
+mergoni_2021_max_date = "2021-02-01"
 
 
 haddad_2021_scopus_query = (
@@ -37,4 +37,4 @@ villano_2021_scopus_query = (
     + " AND SRCTYPE(j)"
 )
 
-villano_max_date = "2021-02-01"
+villano_2021_max_date = "2021-02-01"
