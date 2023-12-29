@@ -8,7 +8,7 @@ from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch
 
 from utils import handler as h
-from utils import query_helpers as qh
+from utils import query_tools as qh
 
 # from utils import country_lists as cl
 

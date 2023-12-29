@@ -2,12 +2,13 @@ import json
 import pandas as pd
 import logging
 import os
-from resources.helper_tools import determine_localization_in_title
+from resources.querying_tools import determine_localization_in_title
 
 from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch
 
 
+# Read environment variables
 exec(open("env_variables.py").read())
 module_logger = logging.getLogger("main.resources.scopus_functions")
 
@@ -35,6 +36,7 @@ project_dir = get_environment_var("project_dir", None)
 scopus_config_file = get_environment_var("scopus_config_file", None)
 scopus_data_dir = get_environment_var("scopus_data_dir", None)
 
+# Read Scopus API key
 con_file = open(scopus_config_file)
 config = json.load(con_file)
 con_file.close()
@@ -54,6 +56,11 @@ selected_columns = [
     "prism:doi",
     "eid",
     "openaccess",
+]
+columns_to_hide = [
+    "openaccess",
+    "localization_in_title_abstract_or_key",
+    "localization_in_title",
 ]
 
 
@@ -175,6 +182,7 @@ def apply_further_transformations(
     - filter by max_date
     - drop duplicates
     - reset index
+    - convert openaccess column to boolean
     """
     module_logger.info("Applying further transformations to dataframe.")
     df_copy = df.copy()
@@ -187,5 +195,6 @@ def apply_further_transformations(
     df_copy.drop_duplicates(subset=["dc:identifier"], inplace=True)
     module_logger.info(f"{len(df_copy)} results after deduplication.")
     df_copy.reset_index(drop=True, inplace=True)
+    df_copy["openaccess"] = df_copy["openaccess"].astype(bool)
     module_logger.info("Further transformations applied to dataframe.")
     return df_copy

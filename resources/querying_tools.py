@@ -6,14 +6,14 @@ from resources.country_lists import (
 )
 
 
-def language_bias_helper(query: str) -> str:
+def language_bias_tool(query: str) -> str:
     """
     Returns a query without the language restriction.
     """
     return re.sub(r"(AND\s)*LANGUAGE\(\w+\)", "", query)
 
 
-def publication_bias_helper(query: str) -> str:
+def publication_bias_tool(query: str) -> str:
     """
     Returns a query without the souce type restriction.
     """
