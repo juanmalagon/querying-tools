@@ -165,5 +165,6 @@ cython_debug/
 **/logs/
 **/*.log
 **/*.csv
+**/*.xlsx
 **/*.DS_Store
 myapp.py
