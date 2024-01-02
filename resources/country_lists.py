@@ -39,7 +39,7 @@ countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
              "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago",
              "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda",
              "Ukraine", "United Arab Emirates", "United Kingdom", "UK",
-             "United States", "USA", "US"
+             "United States", "USA", "US",
              "Uruguay", "Uzbekistan", "Vanuatu",
              "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia",
              "Zimbabwe"]
@@ -109,7 +109,7 @@ non_weird_demonyms = [demonym for demonym in demonyms
                       if demonym not in weird_demonyms]
 
 # List of continents' names
-continents_names = ['Africa', 'Antarctica', 'Asia', 'Europe', 'EU'
+continents_names = ['Africa', 'Antarctica', 'Asia', 'Europe', 'EU',
                     'North America', 'Oceania', 'South America']
 
 # List of continents' demonyms

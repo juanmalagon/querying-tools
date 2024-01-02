@@ -44,7 +44,7 @@ def remove_accents_and_special_chars(text):
 def find_localization_in_text(
     text: str,
     list_of_locations: list[str] =
-        countries+demonyms+continents_names+continents_demonyms,
+        countries + demonyms + continents_names + continents_demonyms,
 ) -> bool:
     """
     Returns True if any country name or demonym is found in the text.
