@@ -33,6 +33,8 @@ logger.addHandler(ch)
 
 # Set up Streamlit
 
+# Instructions
+
 st.markdown(
     """
     # Unbiased Requester
@@ -79,8 +81,6 @@ st.text_input("Insert your original query", key="original_query")
 st.text_input("(Optional: Insert a maximum date for extra filtering)",
               key="max_date")
 
-# st.write(st.session_state)
-
 if st.checkbox("Load an example query and maximum date for extra filtering \
                (Mergoni and De Witte, 2022)"):
     del st.session_state.original_query
@@ -106,6 +106,8 @@ def load_data(query, max_date):
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
+
+# Retrieve data from original query
 
 if st.checkbox("Retrieve data from your original query"
                ):
@@ -139,8 +141,7 @@ st.session_state.pub_bias_query = publication_bias_tool(
     st.session_state.original_query
 )
 
-# st.write("This is your query without language bias:")
-# st.session_state.lang_bias_query
+# Language bias tool
 
 if st.checkbox("Apply language-bias-tool"):
     data_load_state = st.text(
@@ -167,8 +168,7 @@ if st.checkbox("Apply language-bias-tool"):
                            'text/csv',
                            key="download_lang_bias_tool_data")
 
-# st.write("This is your query without publication bias:")
-# st.session_state.pub_bias_query
+# Publication bias tool
 
 if st.checkbox("Apply publication-bias-tool"):
     data_load_state = st.text(
@@ -196,6 +196,7 @@ if st.checkbox("Apply publication-bias-tool"):
                            'text/csv',
                            key="download_pub_bias_tool_data")
 
+# Localization bias tool
 
 if st.checkbox("Apply localization-bias-tool"):
     data_load_state = st.text(
