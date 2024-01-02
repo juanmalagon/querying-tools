@@ -2,6 +2,7 @@ from resources.examples import mergoni_2021_scopus_query, mergoni_2021_max_date
 from resources.querying_tools import (
     language_bias_tool,
     publication_bias_tool,
+    localization_bias_tool,
 )
 from resources.scopus_functions import (
     retrieve_results_from_list_of_queries,
@@ -194,3 +195,41 @@ if st.checkbox("Apply publication-bias-tool"):
                            'pub_bias_tool_data',
                            'text/csv',
                            key="download_pub_bias_tool_data")
+
+
+if st.checkbox("Apply localization-bias-tool"):
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes")
+    data_localized = localization_bias_tool(
+        st.session_state.original_query, st.session_state.max_date)
+    data_localized__weird = data_localized[
+        data_localized['localized_weird']]
+    data_localized__no_weird = data_localized[
+        data_localized['localized_no_weird']]
+    nr_titles__weird = data_localized__weird['localization_in_title'].sum()
+    nr_titles__no_weird = data_localized__no_weird[
+        'localization_in_title'].sum()
+
+    data_load_state.text(
+        "Data loaded!\n" +
+        f"Retrieved {len(data_localized)} localized results with the " +
+        "localization-bias-tool.\n" +
+        f"{len(data_localized__weird)} results come from WEIRD countries, \n" +
+        f" but only {nr_titles__weird} of these have localization in title " +
+        f"({round(100*nr_titles__weird/len(data_localized__weird),1)}%).\n" +
+        f"{len(data_localized__no_weird)} results come from non-WEIRD " +
+        "countries, \n but only " +
+        f"{nr_titles__no_weird} of these have localization in title " +
+        f"({round(100*nr_titles__no_weird/len(data_localized__no_weird),1)}%)."
+        )
+    data_localized_to_display = data_localized.drop(
+        columns=columns_to_hide)
+
+    if st.checkbox("\t Show localization-bias-tool data records"):
+        st.write("Localization-bias-tool data")
+        st.write(data_localized_to_display)
+        st.download_button('Download CSV',
+                           convert_df(data_localized_to_display),
+                           'localization_bias_tool_data',
+                           'text/csv',
+                           key="download_localization_bias_tool_data")
