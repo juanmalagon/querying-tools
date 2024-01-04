@@ -2,7 +2,6 @@ import json
 import pandas as pd
 import logging
 import os
-from resources.querying_tools import determine_localization_in_title
 
 from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch
@@ -59,47 +58,10 @@ selected_columns = [
 ]
 columns_to_hide = [
     "openaccess",
-    "localization_in_title_abstract_or_key",
-    "localization_in_title",
 ]
 
 
 # Functions to retrieve results from Scopus API
-def scopus_query_list_constructor(
-    initial_query: str, long_list: list[str], search_field: str = "ALL",
-    step: int = 20
-):
-    """
-    Constructs a list of queries for the Scopus Search API. This process is
-    necessary because the Scopus Search API limits the lenght of the query
-    strings it accepts.
-    Hence, if we need to look for a multiple terms within a field (e.g., when
-    looking for country names and demonyms in the title, abstract or keywords
-    field) we need to split the list of terms into smaller lists and construct
-    a query for each of them.
-
-    - initial_query is a fixed string that will be used as the first part of
-    each query.
-    - long_list is a list of strings that will be used as the second part of
-    each query.
-    - search_field is the field in which the second part of the query will be
-    searched.
-    - step is the number of elements of the long list that will be included in
-    each query.
-    """
-    list_of_queries = []
-    for i in range(0, len(long_list), step):
-        list_of_queries.append(
-            initial_query
-            + " AND "
-            + search_field
-            + "({"
-            + "} OR {".join(long_list[i: i + step])
-            + "})"
-        )
-    return list_of_queries
-
-
 def retrieve_results_from_query(query: str) -> pd.DataFrame:
     """
     Retrieve results from query.
@@ -112,13 +74,7 @@ def retrieve_results_from_query(query: str) -> pd.DataFrame:
     # Retrieve results
     results = doc_srch.results
     module_logger.info(f"{len(results)} results retrieved from Scopus API.")
-
     results_df = convert_results_to_dataframe(results)
-    if len(results_df) > 0:
-        results_df["localization_in_title_abstract_or_key"] =\
-            "TITLE-ABS-KEY" in query
-    else:
-        results_df["localization_in_title_abstract_or_key"] = None
     module_logger.info("Query results converted to dataframe.")
     return results_df
 
@@ -186,7 +142,6 @@ def apply_further_transformations(
     """
     module_logger.info("Applying further transformations to dataframe.")
     df_copy = df.copy()
-    df_copy = determine_localization_in_title(df_copy)
     if max_date:
         module_logger.info(f"Filtering by max_date: {max_date}")
         df_copy = df_copy[df_copy["prism:coverDate"] < max_date]

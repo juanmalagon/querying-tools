@@ -39,7 +39,7 @@ countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
              "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago",
              "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda",
              "Ukraine", "United Arab Emirates", "United Kingdom", "UK",
-             "United States", "USA",
+             "United States", "USA", "US",
              "Uruguay", "Uzbekistan", "Vanuatu",
              "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia",
              "Zimbabwe"]
@@ -91,7 +91,8 @@ demonyms = ["Afghan", "Albanian", "Algerian", "Andorran", "Angolan",
 
 # Lists for Western, Educated, Industrialized, Rich and Democratic (WEIRD)
 # countries
-weird_countries = ["United States", "USA", "Canada", "United Kingdom", "UK",
+weird_countries = ["United States", "USA", "US", "Canada",
+                   "United Kingdom", "UK",
                    "Ireland", "Australia", "New Zealand", "Germany", "France",
                    "Netherlands", "Belgium", "Luxembourg", "Switzerland",
                    "Austria", "Denmark", "Norway", "Sweden", "Finland",
@@ -106,6 +107,17 @@ non_weird_countries = [country for country in countries
                        if country not in weird_countries]
 non_weird_demonyms = [demonym for demonym in demonyms
                       if demonym not in weird_demonyms]
+
+# List of continents' names
+continents_names = ['Africa', 'Antarctica', 'Asia', 'Europe', 'EU',
+                    'North America', 'Oceania', 'South America']
+
+# List of continents' demonyms
+continents_demonyms = ['African', 'Antarctic', 'Asian', 'European',
+                       'North American', 'Oceanian', 'South American']
+
+# List of cities
+
 
 # Lists for all countries' names stemmed
 stemmed = ["Afghan*", "Alban*", "Alger*", "Andorr*", "Angol*",
