@@ -8,6 +8,16 @@ Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility 
 
     `pip install -r requirements.txt`
 
+    _Note:_ Windows users may experience issues because Windows still uses legacy encodings for the system encoding (the ANSI Code Page). This may cause issues because UTF-8 is widely used on the internet and most Unix systems, including WSL (Windows Subsystem for Linux).
+    
+    If you find encoding problems, you can use the Python UTF-8 Mode to change the default text encoding to UTF-8 by running in the command prompt:
+    
+    `set PYTHONUTF8=1`
+
+    (More info at Using Python on Windows https://docs.python.org/3/using/windows.html)
+
+    
+
 2. Request your Elsevier API key at https://dev.elsevier.com/apikey/manage
 
     (See also:
