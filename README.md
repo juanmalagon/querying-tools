@@ -16,7 +16,6 @@ Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility 
 
     (More info at Using Python on Windows https://docs.python.org/3/using/windows.html)
 
-    
 
 2. Request your Elsevier API key at https://dev.elsevier.com/apikey/manage
 
