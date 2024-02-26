@@ -4,7 +4,7 @@ Repository accompanying the paper:
 Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility challenges in efficiency of education reviews. 2023_
 
 ### Instructions
-1. On Python 3.11+ install the requirements:
+1. On Python 3.11 install the requirements:
 
     `pip install -r requirements.txt`
 
