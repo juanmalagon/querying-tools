@@ -1,21 +1,12 @@
 # unbiased-request
 Repository accompanying the paper:
 
-Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility challenges in efficiency of education reviews. 2023_
+Malagon J, Haelermans C. _Biases and reproducibility challenges in literature reviews - The case of efficiency of education reviews. 2023_
 
 ### Instructions
 1. On Python 3.11 install the requirements:
 
     `pip install -r requirements.txt`
-
-    _Note:_ Windows users may experience issues because Windows still uses legacy encodings for the system encoding (the ANSI Code Page). This may cause issues because UTF-8 is widely used on the internet and most Unix systems, including WSL (Windows Subsystem for Linux).
-    
-    If you find encoding problems, you can use the Python UTF-8 Mode to change the default text encoding to UTF-8 by running in the command prompt:
-    
-    `set PYTHONUTF8=1`
-
-    (More info at Using Python on Windows https://docs.python.org/3/using/windows.html)
-
 
 2. Request your Elsevier API key at https://dev.elsevier.com/apikey/manage
 
@@ -36,3 +27,19 @@ Malagon J, Haelermans C. _Reading between the lines: biases and reproducibility 
 6. Open a terminal and run
 
     `streamlit run unbiased_requester.py`
+
+
+### Troubleshooting
+
+- Windows users who are new to working with Python may experience issues with `pip` because Windows still uses legacy encodings for the system encoding (the ANSI Code Page).
+    
+    If you find encoding problems, you can use the Python UTF-8 Mode to change the default text encoding to UTF-8 by running in the command prompt:
+    
+    `set PYTHONUTF8=1`
+
+    (See also: 
+    
+    Using Python on Windows https://docs.python.org/3/using/windows.html)
+
+- Windows users who are new to working with the command prompt shall recall using `/` when defining the project directory in step 5 (e.g. do _not_ use `C:\my_dir`; use `C:/my_dir`)
+
