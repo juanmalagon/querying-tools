@@ -1,4 +1,4 @@
-# unbiased-request
+# querying-tools
 Repository accompanying the paper:
 
 Malagon J, Haelermans C. _Biases and reproducibility challenges in literature reviews - The case of efficiency of education reviews. 2023_
