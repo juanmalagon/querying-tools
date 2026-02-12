@@ -1,45 +1,80 @@
-# querying-tools
-Repository accompanying the paper:
+# Querying Tools — bias-aware literature review helpers
 
-Malagon J, Haelermans C. _Biases and reproducibility challenges in literature reviews - The case of efficiency of education reviews. 2023_
+This repository provides tools, utilities, and example workflows to help researchers build and run literature-review queries with reduced bias and improved reproducibility. The codebase focuses on query construction, provider-specific helpers (e.g., Scopus), and experiment scripts/notebooks that demonstrate more systematic search strategies.
 
-### Instructions
-1. On Python 3.12 install the requirements:
+## Quick links
 
-    `pip install -r requirements.txt`
+- Documentation: [docs/PROJECT_DOCUMENTATION.md](docs/PROJECT_DOCUMENTATION.md)
+- Main requester script: `unbiased_requester.py`
+- Utilities: `utils/` and `resources/`
+- Example notebooks: [experiments/](experiments/)
 
-2. Request your Elsevier API key at https://dev.elsevier.com/apikey/manage
+## Why this project exists
 
-    (See also:
+Systematic literature reviews and meta-analyses depend heavily on search queries. Small, implicit choices in query wording, filters, or provider APIs can introduce selection bias. This project collects tools and best-practice examples to make query design explicit, repeatable, and easier to audit.
 
-    Elsevier Developer Portal API Authentication docs https://dev.elsevier.com/tecdoc_api_authentication.html
-    
-    API Interface Specification https://dev.elsevier.com/documentation/AuthenticationAPI)
+## Key features
 
-3. Create a `config.json` file with your API key with contents
-    ```
-    {
-        "apikey": "your_api_key_goes_here"
-    }
-    ```
-4. Store your `config.json` file at the `/scopus/` folder
-5. Open `env_variables.py` and change `project_dir` to your current project directory
-6. Open a terminal and run
+- Query-building helpers and templates for reproducible searches
+- Provider-specific adapters (Scopus helper functions included)
+- Notebooks and scripts for running experiments and demonstrations
+- Utilities for storing/configuring API credentials and running batch requests
 
-    `streamlit run unbiased_requester.py`
+## Installation
 
+1. Create and activate a virtual environment (recommended):
 
-### Troubleshooting
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 
-- Windows users who are new to working with Python may experience issues with `pip` because Windows still uses legacy encodings for the system encoding (the ANSI Code Page).
-    
-    If you find encoding problems, you can use the Python UTF-8 Mode to change the default text encoding to UTF-8 by running in the command prompt:
-    
-    `set PYTHONUTF8=1`
+2. Install dependencies:
 
-    (See also: 
-    
-    Using Python on Windows https://docs.python.org/3/using/windows.html)
+```bash
+pip install -r requirements.txt
+```
 
-- Windows users who are new to working with the command prompt shall recall using `/` when defining the project directory in step 5 (e.g. do _not_ use `C:\my_dir`; use `C:/my_dir`)
+## Configuration
 
+- Place provider config (e.g., Scopus credentials) in the `scopus/` folder per the placeholder instruction.
+- Inspect `env_variables.py` for environment keys and paths used across scripts.
+
+Quickstart
+
+1. Read the full project documentation: [docs/PROJECT_DOCUMENTATION.md](docs/PROJECT_DOCUMENTATION.md)
+
+2. Run the interactive requester (example):
+
+```bash
+streamlit run unbiased_requester.py
+```
+
+3. Or run programmatically from Python:
+
+```python
+from utils.query_tools import build_query
+from utils.handler import RequestHandler
+
+q = build_query(...)  # see docs for arguments
+handler = RequestHandler()
+res = handler.run(q)
+```
+
+## Examples and experiments
+
+- Open the notebooks in `experiments/` to see step-by-step examples and small reproducible runs.
+- Use `resources/examples.py` and `utils/examples.py` as starting points for adapting queries to your topic.
+
+## Contributing
+
+- Please open issues or pull requests. When changing usage or APIs, update [docs/PROJECT_DOCUMENTATION.md](docs/PROJECT_DOCUMENTATION.md).
+
+## Troubleshooting
+
+- If packages are missing, ensure your virtual environment is active and run `pip install -r requirements.txt`.
+- For Scopus/Elsevier API access, request an API key at https://dev.elsevier.com/apikey/manage and follow the authentication guidance in the docs.
+
+## License
+
+See the repository `LICENSE` file for license terms.
