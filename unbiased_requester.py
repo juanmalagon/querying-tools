@@ -33,7 +33,7 @@ logger.propagate = False
 
 st.markdown(
     """
-    # Unbiased Requester
+    # Querying Tools
 
     This app allows you to retrieve data from
     <a href="https://www.scopus.com/">Scopus</a> and then apply a set of
@@ -42,8 +42,8 @@ st.markdown(
 
     The app is the accompanying material of the paper:
 
-    Malagon J, Haelermans C. _Reading between the lines: biases and
-    reproducibility challenges in efficiency of education reviews. 2023_
+    Malagon, J., & Haelermans, C. (2026). Systematic flaws: Uncovering biases and replicability challenges in
+    literature reviews on efficiency of education. *International Transactions in Operational Research*.
 
 
     ### How to use it

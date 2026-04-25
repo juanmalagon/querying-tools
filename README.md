@@ -2,9 +2,9 @@
 
 Querying and bias-assessment utilities for Scopus-based literature review workflows.
 
-This repository accompanies the paper:
+This repository accompanies the paper: 
 
-Malagon J, Haelermans C. _Biases and reproducibility challenges in literature reviews - The case of efficiency of education reviews. 2023_
+Malagon, J., & Haelermans, C. (2026). Systematic flaws: Uncovering biases and replicability challenges in literature reviews on efficiency of education. *International Transactions in Operational Research*.
 
 ## Quick start
 
