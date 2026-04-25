@@ -1,0 +1,18 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = [
+    ".git",
+    ".venv",
+    "env",
+    "venv",
+    "experiments",
+    "wip",
+]
+
+[tool.ruff.lint]
+select = ["F"]
