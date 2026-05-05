@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json
+import logging
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
-
 
 _TRUTHY_VALUES = {"1", "true", "yes", "on"}
 
@@ -30,9 +30,7 @@ class AppSettings:
         scopus_config_file = Path(
             env.get("SCOPUS_CONFIG_FILE", resolved_base_dir / "scopus" / "config.json")
         )
-        scopus_data_dir = Path(
-            env.get("SCOPUS_DATA_DIR", resolved_base_dir / "data")
-        )
+        scopus_data_dir = Path(env.get("SCOPUS_DATA_DIR", resolved_base_dir / "data"))
 
         return cls(
             base_dir=resolved_base_dir,
@@ -49,7 +47,9 @@ class AppSettings:
         if not self.scopus_config_file.exists():
             return False
         try:
-            payload = json.loads(self.scopus_config_file.read_text(encoding="utf-8"))
+            payload = json.loads(
+                self.scopus_config_file.read_text(encoding="utf-8"),
+            )
         except (OSError, json.JSONDecodeError):
             return False
         return bool(payload.get("apikey"))
@@ -59,7 +59,9 @@ class AppSettings:
             return self.scopus_api_key
         if self.scopus_config_file.exists():
             try:
-                payload = json.loads(self.scopus_config_file.read_text(encoding="utf-8"))
+                payload = json.loads(
+                    self.scopus_config_file.read_text(encoding="utf-8"),
+                )
             except json.JSONDecodeError as exc:
                 raise RuntimeError(
                     f"Invalid JSON in Scopus config file: {self.scopus_config_file}"
@@ -74,3 +76,34 @@ class AppSettings:
 
 
 settings = AppSettings.from_env()
+
+
+def configure_logging(
+    logger_name: str = "querying_tools",
+    log_level: str | None = None,
+) -> logging.Logger:
+    """Centralized logging setup.
+
+    Args:
+        logger_name: The name for the root application logger.
+        log_level: Override log level (defaults to ``settings.log_level``).
+
+    Returns:
+        A configured :class:`logging.Logger` instance.
+
+    Call this once at application startup to ensure consistent log formatting
+    and prevent duplicate handlers.
+    """
+    level = log_level if log_level is not None else settings.log_level
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(getattr(logging, level.upper(), logging.INFO))
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(
+            logging.Formatter(
+                "%(asctime)s - [%(module)s|%(funcName)s] - %(levelname)s - %(message)s",
+            ),
+        )
+        logger.addHandler(handler)
+    logger.propagate = False
+    return logger

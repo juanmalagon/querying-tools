@@ -1,31 +1,19 @@
-from resources.examples import mergoni_2021_scopus_query, mergoni_2021_max_date
-from resources.querying_tools import (
-    language_bias_tool,
-    publication_bias_tool,
-    localization_bias_tool,
-)
-from resources.scopus_functions import (
-    retrieve_results_from_list_of_queries,
-    columns_to_hide,
-)
-from app_config import settings
-import logging
 import streamlit as st
 
+from app_config import configure_logging, settings
+from resources.examples import mergoni_2021_max_date, mergoni_2021_scopus_query
+from resources.querying_tools import (
+    language_bias_tool,
+    localization_bias_tool,
+    publication_bias_tool,
+)
+from resources.scopus_functions import (
+    columns_to_hide,
+    retrieve_results_from_list_of_queries,
+)
 
 # Set up logging
-# Create logger with 'main'
-logger = logging.getLogger("querying_tools")
-logger.setLevel(getattr(logging, settings.log_level, logging.INFO))
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    handler.setFormatter(
-        logging.Formatter(
-            "%(asctime)s - [%(module)s|%(funcName)s] - %(levelname)s - %(message)s"
-        )
-    )
-    logger.addHandler(handler)
-logger.propagate = False
+logger = configure_logging()
 
 # Set up Streamlit
 
@@ -92,9 +80,9 @@ if st.checkbox(
     st.session_state.max_date = mergoni_2021_max_date
 
 "This is your original query:"
-st.session_state.original_query
+st.session_state.get("original_query", "")
 "This is your maximum date for extra filtering:"
-st.session_state.max_date
+st.session_state.get("max_date", "")
 
 
 @st.cache_data
@@ -109,7 +97,9 @@ def get_current_inputs():
     query = st.session_state.get("original_query", "").strip()
     max_date = st.session_state.get("max_date", "").strip() or None
     if not query:
-        st.error("Enter a Scopus query or load the example query before retrieving data.")
+        st.error(
+            "Enter a Scopus query or load the example query before retrieving data."
+        )
         return None, None
     return query, max_date
 
@@ -138,7 +128,9 @@ def convert_df(df):
 # Retrieve data from original query
 
 if st.checkbox("Retrieve data from your original query"):
-    data_load_state = st.text("Loading data for your query... This may take a few minutes")
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes"
+    )
     try:
         data_original = get_original_data()
     except Exception as exc:
@@ -146,8 +138,12 @@ if st.checkbox("Retrieve data from your original query"):
         show_data_error(exc)
     else:
         if data_original is not None:
-            data_load_state.text(f"Data loaded! Retrieved {len(data_original)} results.")
-            data_original_to_display = data_original.drop(columns=columns_to_hide, errors="ignore")
+            data_load_state.text(
+                f"Data loaded! Retrieved {len(data_original)} results."
+            )
+            data_original_to_display = data_original.drop(
+                columns=columns_to_hide, errors="ignore"
+            )
             if st.checkbox("\t Show original data"):
                 st.write("Original query data")
                 st.write(data_original_to_display)
@@ -176,13 +172,17 @@ st.session_state.pub_bias_query = publication_bias_tool(
 # Language bias tool
 
 if st.checkbox("Apply language-bias-tool"):
-    data_load_state = st.text("Loading data for your query... This may take a few minutes")
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes"
+    )
     try:
         data_original = get_original_data()
         if data_original is None:
             data_load_state.empty()
         else:
-            data_lang = load_data(st.session_state.lang_bias_query, st.session_state.max_date)
+            data_lang = load_data(
+                st.session_state.lang_bias_query, st.session_state.max_date
+            )
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_lang)} results from language-bias-tool.\n"
@@ -193,7 +193,9 @@ if st.checkbox("Apply language-bias-tool"):
                 data_lang_diff = data_lang[
                     ~data_lang["dc:identifier"].isin(data_original["dc:identifier"])
                 ].reset_index(drop=True)
-                data_lang_diff_to_display = data_lang_diff.drop(columns=columns_to_hide, errors="ignore")
+                data_lang_diff_to_display = data_lang_diff.drop(
+                    columns=columns_to_hide, errors="ignore"
+                )
                 st.write("Language-bias-tool data")
                 st.write(data_lang_diff_to_display)
                 st.download_button(
@@ -210,13 +212,17 @@ if st.checkbox("Apply language-bias-tool"):
 # Publication bias tool
 
 if st.checkbox("Apply publication-bias-tool"):
-    data_load_state = st.text("Loading data for your query... This may take a few minutes")
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes"
+    )
     try:
         data_original = get_original_data()
         if data_original is None:
             data_load_state.empty()
         else:
-            data_pub = load_data(st.session_state.pub_bias_query, st.session_state.max_date)
+            data_pub = load_data(
+                st.session_state.pub_bias_query, st.session_state.max_date
+            )
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_pub)} results from publication-bias-tool.\n"
@@ -228,7 +234,9 @@ if st.checkbox("Apply publication-bias-tool"):
                 data_pub_diff = data_pub[
                     ~data_pub["dc:identifier"].isin(data_original["dc:identifier"])
                 ].reset_index(drop=True)
-                data_pub_diff_to_display = data_pub_diff.drop(columns=columns_to_hide, errors="ignore")
+                data_pub_diff_to_display = data_pub_diff.drop(
+                    columns=columns_to_hide, errors="ignore"
+                )
                 st.write("Publication-bias-tool data")
                 st.write(data_pub_diff_to_display)
                 st.download_button(
@@ -245,31 +253,37 @@ if st.checkbox("Apply publication-bias-tool"):
 # Localization bias tool
 
 if st.checkbox("Apply localization-bias-tool"):
-    data_load_state = st.text("Loading data for your query... This may take a few minutes")
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes"
+    )
     try:
         query, max_date = get_current_inputs()
         if not query:
             data_load_state.empty()
         else:
             data_localized = localization_bias_tool(query, max_date)
-            data_localized__weird = data_localized[data_localized["localized_weird"]]
-            data_localized__no_weird = data_localized[data_localized["localized_no_weird"]]
-            nr_titles__weird = data_localized__weird["localization_in_title"].sum()
-            nr_titles__no_weird = data_localized__no_weird["localization_in_title"].sum()
+            data_localized_weird = data_localized[data_localized["localized_weird"]]
+            data_localized_no_weird = data_localized[
+                data_localized["localized_no_weird"]
+            ]
+            nr_titles_weird = data_localized_weird["localization_in_title"].sum()
+            nr_titles_no_weird = data_localized_no_weird["localization_in_title"].sum()
 
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_localized)} localized results with the "
                 + "localization-bias-tool.\n"
-                + f"{len(data_localized__weird)} results come from WEIRD countries, \n"
-                + f" but only {nr_titles__weird} of these have localization in title "
-                + f"({safe_percentage(nr_titles__weird, len(data_localized__weird))}%).\n"
-                + f"{len(data_localized__no_weird)} results come from non-WEIRD "
+                + f"{len(data_localized_weird)} results come from WEIRD countries, \n"
+                + f" but only {nr_titles_weird} of these have localization in title "
+                + f"({safe_percentage(nr_titles_weird, len(data_localized_weird))}%).\n"
+                + f"{len(data_localized_no_weird)} results come from non-WEIRD "
                 + "countries, \n but only "
-                + f"{nr_titles__no_weird} of these have localization in title "
-                + f"({safe_percentage(nr_titles__no_weird, len(data_localized__no_weird))}%)."
+                + f"{nr_titles_no_weird} of these have localization in title "
+                + f"({safe_percentage(nr_titles_no_weird, len(data_localized_no_weird))}%)."
             )
-            data_localized_to_display = data_localized.drop(columns=columns_to_hide, errors="ignore")
+            data_localized_to_display = data_localized.drop(
+                columns=columns_to_hide, errors="ignore"
+            )
 
             if st.checkbox("\t Show localization-bias-tool data records"):
                 st.write("Localization-bias-tool data")
@@ -288,15 +302,21 @@ if st.checkbox("Apply localization-bias-tool"):
 # Availability bias tool
 
 if st.checkbox("Apply availability-bias-tool"):
-    data_load_state = st.text("Loading data for your query... This may take a few minutes")
+    data_load_state = st.text(
+        "Loading data for your query... This may take a few minutes"
+    )
     try:
         data_available = get_original_data()
         if data_available is None:
             data_load_state.empty()
         else:
             data_available = data_available.copy()
-            nr_open_access_records = int(data_available["openaccess"].fillna(False).astype(bool).sum())
-            availability_benchmark = safe_percentage(nr_open_access_records, len(data_available))
+            nr_open_access_records = int(
+                data_available["openaccess"].fillna(False).astype(bool).sum()
+            )
+            availability_benchmark = safe_percentage(
+                nr_open_access_records, len(data_available)
+            )
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_available)} results with the "
@@ -307,9 +327,9 @@ if st.checkbox("Apply availability-bias-tool"):
             )
 
             if st.checkbox("\t Show availability-bias-tool data records"):
-                data_available_diff = data_available[data_available["openaccess"]].reset_index(
-                    drop=True
-                )
+                data_available_diff = data_available[
+                    data_available["openaccess"]
+                ].reset_index(drop=True)
                 st.write("Availability-bias-tool data")
                 st.write(data_available_diff)
                 st.download_button(

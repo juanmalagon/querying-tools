@@ -1,155 +1,147 @@
 # Querying Tools
 
-Querying and bias-assessment utilities for Scopus-based literature review workflows.
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.12-blue?logo=python">
+  <img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-green">
+  <img alt="Streamlit" src="https://img.shields.io/badge/built%20with-Streamlit-red?logo=streamlit">
+  <img alt="Paper DOI" src="https://img.shields.io/badge/DOI-10.1111%2Fitor.70207-blue?logo=doi">
+</p>
 
-This repository accompanies the paper: 
+Bias-assessment and querying utilities for Scopus-based literature reviews — a companion tool for the paper:
 
-Malagon, J., & Haelermans, C. (2026). Systematic flaws: Uncovering biases and replicability challenges in literature reviews on efficiency of education. *International Transactions in Operational Research*.
+> **Malagon, J., & Haelermans, C. (2026).** Systematic Flaws: Uncovering Biases and Replicability Challenges in Literature Reviews on Efficiency of Education. *International Transactions in Operational Research*.  
+> [DOI: 10.1111/itor.70207](https://doi.org/10.1111/itor.70207)
 
-## Quick start
+---
 
-For a person who just cloned the repository:
+## Features
 
-1. Use Python 3.12.
-2. Install development dependencies:
+A Streamlit app that retrieves data from Scopus and runs four bias-assessment tools:
 
-   `pip install -r requirements-dev.txt`
+- **🔤 Language bias** — checks for language restrictions in the result set
+- **📊 Publication bias** — analyses publication outlet patterns
+- **🌍 Localization bias** — maps geographic distribution of results
+- **🔓 Availability bias** — assesses full-text accessibility
 
-3. Run the basic checks:
+---
 
-   - `ruff check .`
-   - `pytest`
+## Quick Start
 
-4. Start the app:
+```bash
+# 1. Clone the repository
+git clone https://github.com/juanmalagon/querying-tools.git
+cd querying-tools
 
-   `streamlit run unbiased_requester.py`
+# 2. Install development dependencies
+pip install -r requirements-dev.txt
 
-5. Open:
+# 3. Install pre-commit hooks (optional but recommended)
+pre-commit install
 
-   `http://localhost:8501`
+# 4. Run basic checks
+ruff check .
+ruff format --check .
+pytest
 
-At this point, the app should start even without Scopus credentials. Without a key, it should show a warning and the live retrieval features will not work.
+# 5. Launch the app
+streamlit run unbiased_requester.py
+```
 
-## Application status
+Open [http://localhost:8501](http://localhost:8501) in your browser.
 
-The project includes minimum deployment-oriented features:
+> **No Scopus key needed to start.** Without credentials the app opens and shows a warning; live retrieval will be disabled.
 
-- environment-based configuration
-- slim production dependencies
-- Docker support
-- CI checks
-- basic automated tests
+---
 
-This is a deployable baseline, not yet a fully hardened production service.
+## Usage
 
-## Local run
+### Scopus Credentials
 
-### 1. Install dependencies
+Choose one of the following (**Option A is recommended for production**):
 
-Runtime only:
+**Option A — Environment variable (recommended):**
 
-`pip install -r requirements.txt`
+```bash
+export SCOPUS_API_KEY="your_api_key_here"
+```
 
-Development checks:
+You can also copy `.env.example` to `.env` and fill in your key:
 
-`pip install -r requirements-dev.txt`
+```bash
+cp .env.example .env
+# edit .env with your real key
+```
 
-Notebook and exploratory work:
+**Option B — Config file (for local development):**
 
-`pip install -r requirements-research.txt`
+Copy the example and edit it:
 
-### 2. Configure Scopus credentials
+```bash
+cp scopus/config.example.json scopus/config.json
+# edit scopus/config.json with your real key
+```
 
-Choose one of these options.
-
-#### Option A: environment variable
-
-PowerShell:
-
-`$env:SCOPUS_API_KEY="your_api_key_here"`
-
-Command Prompt:
-
-`set SCOPUS_API_KEY=your_api_key_here`
-
-#### Option B: config file
-
-Create `scopus/config.json` with:
+The resulting file should look like:
 
 ```json
 {
-  "apikey": "your_api_key_goes_here"
+  "apikey": "your_scopus_api_key_here"
 }
 ```
 
-### 3. Start the application
+> **⚠️ Never commit `scopus/config.json` or `.env`.** Both are in `.gitignore`.
 
-`streamlit run unbiased_requester.py`
+### Running
 
-Open `http://localhost:8501` in your browser.
+```bash
+streamlit run unbiased_requester.py
+```
 
-### 4. Manual test flow
+Then open `http://localhost:8501`.
 
-Without credentials:
+### Quick test without credentials
 
-- confirm the app opens
-- confirm it shows a Scopus credentials warning
+The app opens and shows a Scopus credentials warning — live retrieval is disabled
+but the UI and example queries remain accessible.
 
-With valid credentials:
+---
 
-- load the example query
-- retrieve original query data
-- run the language-bias tool
-- run the publication-bias tool
-- run the localization-bias tool
-- run the availability-bias tool
+## Development
 
-## Environment variables
+See **[DEVELOPMENT.md](DEVELOPMENT.md)** for:
+- Full project structure and architecture
+- EditorConfig, pre-commit hooks, and CI pipeline
+- Detailed configuration reference
+- Local development setup and contributing guide
 
-Copy [.env.example](.env.example) and configure these values in your host or container environment:
-
-- `SCOPUS_API_KEY`
-- `SCOPUS_CONFIG_FILE` optional fallback path
-- `SCOPUS_DATA_DIR` optional export directory
-- `SAVE_TO_CSV` set to `1` or `true` to persist exports
-- `LOG_LEVEL`
+---
 
 ## Docker
 
-Build the container:
+```bash
+docker build -t querying-tools .
+docker run -p 8501:8501 -e SCOPUS_API_KEY=your_key_here querying-tools
+```
 
-`docker build -t querying-tools .`
-
-Run it:
-
-`docker run -p 8501:8501 -e SCOPUS_API_KEY=your_key_here querying-tools`
-
-## Testing
-
-Automated checks:
-
-- `ruff check .`
-- `pytest`
-
-Manual checks:
-
-- app startup without credentials
-- live retrieval with valid Scopus credentials
+---
 
 ## Documentation
 
-Additional project documentation is available in [docs/README.md](docs/README.md):
+| Resource | Description |
+|----------|-------------|
+| **[DEVELOPMENT.md](DEVELOPMENT.md)** | Technical deep-dive: project structure, detailed setup, configuration, testing, and contributing |
+| **Unbiased requester** | The app entry point — `unbiased_requester.py` |
+| **Configuration** | `.env.example` for environment variables; `app_config.py` for settings loading |
 
-- [Setup and local usage](docs/setup.md)
-- [Testing and validation](docs/testing.md)
-- [Deployment notes](docs/deployment.md)
+---
 
-## Deployment notes
+## Deployment Notes
 
 - Keep the Scopus API key server-side only.
-- Prefer container deployment for first release.
+- Container deployment is recommended for first release.
 
-## Troubleshooting
+---
 
-- On Windows, if you hit encoding issues during installation, run `set PYTHONUTF8=1` before installing packages.
-- If the app starts but retrieval fails, verify that `SCOPUS_API_KEY` is set or that `scopus/config.json` exists and contains valid JSON.
+## License
+
+Distributed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
