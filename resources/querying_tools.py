@@ -58,16 +58,12 @@ def determine_localization_in_title(
 ) -> pd.DataFrame:
     """Add column 'localization_in_title' (boolean)."""
     df_copy = df.copy()
-    df_copy["localization_in_title"] = df["dc:title"].apply(
-        find_localization_in_text)
+    df_copy["localization_in_title"] = df["dc:title"].apply(find_localization_in_text)
     return df_copy
 
 
 def scopus_query_list_constructor(
-    initial_query: str,
-    long_list: list[str],
-    search_field: str = "ALL",
-    step: int = 20
+    initial_query: str, long_list: list[str], search_field: str = "ALL", step: int = 20
 ):
     """Constructs a list of queries for the Scopus Search API adding all the
     keywords in the long_list to the initial_query.
@@ -94,7 +90,7 @@ def scopus_query_list_constructor(
             + " AND "
             + search_field
             + "({"
-            + "} OR {".join(long_list[i: i + step])
+            + "} OR {".join(long_list[i : i + step])
             + "})"
         )
     return list_of_queries
@@ -125,7 +121,8 @@ def create_localized_queries(
         step=nr_identifiers_per_query,
     )
     list_of_country_identifiers_complement = [
-        identifier for identifier in universe
+        identifier
+        for identifier in universe
         if identifier not in list_of_country_identifiers
     ]
     list_of_localized_queries_complement = scopus_query_list_constructor(
@@ -142,10 +139,10 @@ def create_localized_queries(
 
 # Localization bias tool
 def localization_bias_tool(
-        query: str,
-        max_date: str,
-        list_of_country_identifiers: list = weird_countries+weird_demonyms,
-        ) -> pd.DataFrame:
+    query: str,
+    max_date: str,
+    list_of_country_identifiers: list = weird_countries + weird_demonyms,
+) -> pd.DataFrame:
     """This function takes a query and a list of country identifiers and returns
     a dataframe with the results of the query localized in the countries
     specified in the list of country identifiers, as well as in the remaining
@@ -155,32 +152,32 @@ def localization_bias_tool(
     localized_queries_dict = create_localized_queries(
         original_query=query,
         list_of_country_identifiers=list_of_country_identifiers,
-        search_field='TITLE-ABS-KEY',
+        search_field="TITLE-ABS-KEY",
         nr_identifiers_per_query=20,
-        universe=countries+demonyms,
+        universe=countries + demonyms,
     )
     # Retrieve localized records
     data_localized_weird = retrieve_results_from_list_of_queries(
-        list_of_queries=localized_queries_dict['localized_queries'],
+        list_of_queries=localized_queries_dict["localized_queries"],
         max_date=max_date,
     )
     data_localized_no_weird = retrieve_results_from_list_of_queries(
-        list_of_queries=localized_queries_dict['localized_queries_complement'],
+        list_of_queries=localized_queries_dict["localized_queries_complement"],
         max_date=max_date,
     )
     # Concatenate data from weird and non-weird countries
-    data_localized = pd.concat(
-        [data_localized_weird, data_localized_no_weird]
-    ).drop_duplicates(
-        subset=['dc:identifier']
-    ).reset_index(drop=True)
+    data_localized = (
+        pd.concat([data_localized_weird, data_localized_no_weird])
+        .drop_duplicates(subset=["dc:identifier"])
+        .reset_index(drop=True)
+    )
     # Label records based on whether they are from the list of countries or not
-    data_localized['localized_weird'] = \
-        data_localized['dc:identifier'].isin(
-            data_localized_weird['dc:identifier'])
-    data_localized['localized_no_weird'] = \
-        data_localized['dc:identifier'].isin(
-            data_localized_no_weird['dc:identifier'])
+    data_localized["localized_weird"] = data_localized["dc:identifier"].isin(
+        data_localized_weird["dc:identifier"]
+    )
+    data_localized["localized_no_weird"] = data_localized["dc:identifier"].isin(
+        data_localized_no_weird["dc:identifier"]
+    )
     # Add column 'localization_in_title' (boolean)
     data_localized = determine_localization_in_title(data_localized)
     return data_localized

@@ -4,6 +4,7 @@ import pandas as pd
 # without importing the module, because the module body calls
 # streamlit at the top level (st.markdown, etc.).
 
+
 def safe_percentage(part: int, total: int) -> float:
     """Replication of unbiased_requester.safe_percentage for test isolation."""
     return round(100 * part / total, 1) if total else 0.0

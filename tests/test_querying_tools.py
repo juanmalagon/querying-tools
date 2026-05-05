@@ -15,6 +15,7 @@ from resources.querying_tools import (
 
 # --- language_bias_tool ---
 
+
 def test_language_bias_tool_removes_language_filter():
     query = "ALL({education}) AND LANGUAGE(english) AND SRCTYPE(j)"
 
@@ -39,6 +40,7 @@ def test_language_bias_tool_empty_string():
 
 
 # --- publication_bias_tool ---
+
 
 def test_publication_bias_tool_removes_source_type_filter():
     query = "ALL({education}) AND LANGUAGE(english) AND SRCTYPE(j)"
@@ -65,6 +67,7 @@ def test_publication_bias_tool_empty_string():
 
 # --- remove_accents_and_special_chars ---
 
+
 def test_remove_accents_handles_accented_characters():
     result = remove_accents_and_special_chars("éxité")
 
@@ -85,6 +88,7 @@ def test_remove_accents_strips_special_characters():
 
 
 # --- find_localization_in_text ---
+
 
 def test_find_localization_in_text_detects_country():
     text = "Education policy in Belgium and France"
@@ -111,6 +115,7 @@ def test_find_localization_in_text_with_custom_location_list():
 
 # --- determine_localization_in_title ---
 
+
 def test_determine_localization_in_title_adds_column():
     df = pd.DataFrame({"dc:title": ["Study in Belgium", "Generic theory"]})
     result = determine_localization_in_title(df)
@@ -120,6 +125,7 @@ def test_determine_localization_in_title_adds_column():
 
 
 # --- scopus_query_list_constructor ---
+
 
 def test_scopus_query_list_constructor_splits_long_list():
     initial = "ALL({education})"
@@ -152,6 +158,7 @@ def test_scopus_query_list_constructor_single_query_when_under_step():
 
 
 # --- create_localized_queries ---
+
 
 def test_create_localized_queries_produces_disjoint_sets():
     """Weird + complement should cover the entire universe exactly once."""
@@ -228,11 +235,17 @@ def test_localization_bias_tool_labels_weird_and_no_weird():
     assert "localized_no_weird" in result.columns
     assert "localization_in_title" in result.columns
 
-    assert result.loc[result["dc:identifier"] == "id_weird", "localized_weird"].iloc[0] == True  # noqa: E712
-    assert result.loc[result["dc:identifier"] == "id_weird", "localized_no_weird"].iloc[0] == False  # noqa: E712
+    assert result.loc[result["dc:identifier"] == "id_weird", "localized_weird"].iloc[0]
+    assert not result.loc[
+        result["dc:identifier"] == "id_weird", "localized_no_weird"
+    ].iloc[0]
 
-    assert result.loc[result["dc:identifier"] == "id_no_weird", "localized_weird"].iloc[0] == False  # noqa: E712
-    assert result.loc[result["dc:identifier"] == "id_no_weird", "localized_no_weird"].iloc[0] == True  # noqa: E712
+    assert not result.loc[
+        result["dc:identifier"] == "id_no_weird", "localized_weird"
+    ].iloc[0]
+    assert result.loc[
+        result["dc:identifier"] == "id_no_weird", "localized_no_weird"
+    ].iloc[0]
 
 
 def test_localization_bias_tool_deduplicates_overlap():
@@ -254,8 +267,8 @@ def test_localization_bias_tool_deduplicates_overlap():
         )
 
     assert len(result) == 1
-    assert result["localized_weird"].iloc[0] == True  # noqa: E712
-    assert result["localized_no_weird"].iloc[0] == True  # noqa: E712
+    assert result["localized_weird"].iloc[0]
+    assert result["localized_no_weird"].iloc[0]
 
 
 def test_localization_bias_tool_detects_localization_in_title():
@@ -277,8 +290,12 @@ def test_localization_bias_tool_detects_localization_in_title():
             list_of_country_identifiers=["belgium"],
         )
 
-    assert result.loc[result["dc:identifier"] == "id_1", "localization_in_title"].iloc[0] == True  # noqa: E712
-    assert result.loc[result["dc:identifier"] == "id_2", "localization_in_title"].iloc[0] == False  # noqa: E712
+    assert result.loc[result["dc:identifier"] == "id_1", "localization_in_title"].iloc[
+        0
+    ]
+    assert not result.loc[
+        result["dc:identifier"] == "id_2", "localization_in_title"
+    ].iloc[0]
 
 
 def test_localization_bias_tool_empty_results():
@@ -288,10 +305,16 @@ def test_localization_bias_tool_empty_results():
     ) as mock_retrieve:
         mock_retrieve.return_value = pd.DataFrame(
             columns=[
-                "dc:identifier", "dc:title", "dc:creator",
-                "prism:publicationName", "prism:coverDate",
-                "prism:aggregationType", "subtypeDescription",
-                "prism:doi", "eid", "openaccess",
+                "dc:identifier",
+                "dc:title",
+                "dc:creator",
+                "prism:publicationName",
+                "prism:coverDate",
+                "prism:aggregationType",
+                "subtypeDescription",
+                "prism:doi",
+                "eid",
+                "openaccess",
             ]
         )
 

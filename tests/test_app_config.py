@@ -35,6 +35,7 @@ def test_resolve_scopus_api_key_from_config_file(tmp_path):
 
 # --- has_scopus_credentials ---
 
+
 def test_has_scopus_credentials_from_env(tmp_path):
     settings = AppSettings.from_env(
         environ={"SCOPUS_API_KEY": "env-key"},
@@ -72,6 +73,7 @@ def test_has_scopus_credentials_malformed_config_file(tmp_path):
 
 # --- resolve_scopus_api_key error paths ---
 
+
 def test_resolve_scopus_api_key_no_credentials_raises(tmp_path):
     settings = AppSettings.from_env(environ={}, base_dir=tmp_path)
 
@@ -91,6 +93,7 @@ def test_resolve_scopus_api_key_malformed_file_raises(tmp_path):
 
 
 # --- configure_logging ---
+
 
 def test_configure_logging_returns_logger():
     logger = configure_logging("test_logger")

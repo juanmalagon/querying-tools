@@ -30,9 +30,7 @@ class AppSettings:
         scopus_config_file = Path(
             env.get("SCOPUS_CONFIG_FILE", resolved_base_dir / "scopus" / "config.json")
         )
-        scopus_data_dir = Path(
-            env.get("SCOPUS_DATA_DIR", resolved_base_dir / "data")
-        )
+        scopus_data_dir = Path(env.get("SCOPUS_DATA_DIR", resolved_base_dir / "data"))
 
         return cls(
             base_dir=resolved_base_dir,
@@ -49,9 +47,9 @@ class AppSettings:
         if not self.scopus_config_file.exists():
             return False
         try:
-                payload = json.loads(
-                    self.scopus_config_file.read_text(encoding="utf-8"),
-                )
+            payload = json.loads(
+                self.scopus_config_file.read_text(encoding="utf-8"),
+            )
         except (OSError, json.JSONDecodeError):
             return False
         return bool(payload.get("apikey"))

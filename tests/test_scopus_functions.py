@@ -8,6 +8,7 @@ from resources.scopus_functions import (
 
 # --- convert_results_to_dataframe ---
 
+
 def test_convert_results_to_dataframe_extracts_selected_columns():
     records = [
         {
@@ -105,6 +106,7 @@ def test_convert_results_to_dataframe_empty_list():
 
 
 # --- apply_further_transformations ---
+
 
 def test_apply_further_transformations_filters_by_max_date():
     df = pd.DataFrame(
