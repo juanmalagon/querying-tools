@@ -1,31 +1,20 @@
-from resources.examples import mergoni_2021_scopus_query, mergoni_2021_max_date
-from resources.querying_tools import (
-    language_bias_tool,
-    publication_bias_tool,
-    localization_bias_tool,
-)
-from resources.scopus_functions import (
-    retrieve_results_from_list_of_queries,
-    columns_to_hide,
-)
-from app_config import settings
-import logging
+
 import streamlit as st
 
+from app_config import configure_logging, settings
+from resources.examples import mergoni_2021_max_date, mergoni_2021_scopus_query
+from resources.querying_tools import (
+    language_bias_tool,
+    localization_bias_tool,
+    publication_bias_tool,
+)
+from resources.scopus_functions import (
+    columns_to_hide,
+    retrieve_results_from_list_of_queries,
+)
 
 # Set up logging
-# Create logger with 'main'
-logger = logging.getLogger("querying_tools")
-logger.setLevel(getattr(logging, settings.log_level, logging.INFO))
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    handler.setFormatter(
-        logging.Formatter(
-            "%(asctime)s - [%(module)s|%(funcName)s] - %(levelname)s - %(message)s"
-        )
-    )
-    logger.addHandler(handler)
-logger.propagate = False
+logger = configure_logging()
 
 # Set up Streamlit
 
@@ -92,9 +81,9 @@ if st.checkbox(
     st.session_state.max_date = mergoni_2021_max_date
 
 "This is your original query:"
-st.session_state.original_query
+st.session_state.get("original_query", "")
 "This is your maximum date for extra filtering:"
-st.session_state.max_date
+st.session_state.get("max_date", "")
 
 
 @st.cache_data
@@ -252,22 +241,22 @@ if st.checkbox("Apply localization-bias-tool"):
             data_load_state.empty()
         else:
             data_localized = localization_bias_tool(query, max_date)
-            data_localized__weird = data_localized[data_localized["localized_weird"]]
-            data_localized__no_weird = data_localized[data_localized["localized_no_weird"]]
-            nr_titles__weird = data_localized__weird["localization_in_title"].sum()
-            nr_titles__no_weird = data_localized__no_weird["localization_in_title"].sum()
+            data_localized_weird = data_localized[data_localized["localized_weird"]]
+            data_localized_no_weird = data_localized[data_localized["localized_no_weird"]]
+            nr_titles_weird = data_localized_weird["localization_in_title"].sum()
+            nr_titles_no_weird = data_localized_no_weird["localization_in_title"].sum()
 
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_localized)} localized results with the "
                 + "localization-bias-tool.\n"
-                + f"{len(data_localized__weird)} results come from WEIRD countries, \n"
-                + f" but only {nr_titles__weird} of these have localization in title "
-                + f"({safe_percentage(nr_titles__weird, len(data_localized__weird))}%).\n"
-                + f"{len(data_localized__no_weird)} results come from non-WEIRD "
+                + f"{len(data_localized_weird)} results come from WEIRD countries, \n"
+                + f" but only {nr_titles_weird} of these have localization in title "
+                + f"({safe_percentage(nr_titles_weird, len(data_localized_weird))}%).\n"
+                + f"{len(data_localized_no_weird)} results come from non-WEIRD "
                 + "countries, \n but only "
-                + f"{nr_titles__no_weird} of these have localization in title "
-                + f"({safe_percentage(nr_titles__no_weird, len(data_localized__no_weird))}%)."
+                + f"{nr_titles_no_weird} of these have localization in title "
+                + f"({safe_percentage(nr_titles_no_weird, len(data_localized_no_weird))}%)."
             )
             data_localized_to_display = data_localized.drop(columns=columns_to_hide, errors="ignore")
 

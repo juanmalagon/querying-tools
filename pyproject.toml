@@ -1,3 +1,41 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "querying-tools"
+version = "0.2.0"
+description = "Bias-assessment and querying utilities for Scopus-based literature reviews"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Juan Malagon"},
+]
+dependencies = [
+    "elsapy~=0.5.1",
+    "pandas~=2.2.3",
+    "streamlit~=1.44.1",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest~=8.3",
+    "ruff~=0.11",
+]
+
+[project.urls]
+Homepage = "https://github.com/juanmalagon/querying-tools"
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
@@ -15,4 +53,12 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["F"]
+select = ["F", "E", "W", "I", "N", "D", "SIM", "PL"]
+ignore = [
+    "D203",
+    "D213",
+    "D406",
+    "D407",
+    "D413",
+    "PLR0913",
+]

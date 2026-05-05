@@ -211,6 +211,9 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# Credentials – never commit real keys
+scopus/config.json
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
@@ -219,8 +222,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Misc
-**/*.json
+# Data artifacts
 **/data/
 **/logs/
 **/*.log

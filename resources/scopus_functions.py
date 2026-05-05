@@ -1,14 +1,12 @@
 import logging
 
 import pandas as pd
-
 from elsapy.elsclient import ElsClient
 from elsapy.elssearch import ElsSearch
 
 from app_config import settings
 
-
-module_logger = logging.getLogger("main.resources.scopus_functions")
+module_logger = logging.getLogger(__name__)
 client = None
 
 # Define selected columns
@@ -39,9 +37,7 @@ def get_client() -> ElsClient:
 
 # Functions to retrieve results from Scopus API
 def retrieve_results_from_query(query: str) -> pd.DataFrame:
-    """
-    Retrieve results from query.
-    """
+    """Retrieve results from query."""
     module_logger.info(
         f"Retrieving results from Scopus API for query: {query}")
     # Initialize document search object and execute search
@@ -59,9 +55,7 @@ def retrieve_results_from_list_of_queries(
     list_of_queries: list[str],
     max_date: str,
 ) -> pd.DataFrame:
-    """
-    Retrieve results from list of queries and concatenate them.
-    """
+    """Retrieve results from list of queries and concatenate them."""
     module_logger.info(
         f"Retrieving results from {len(list_of_queries)} queries.")
     results_dfs = []
@@ -106,15 +100,14 @@ def convert_results_to_dataframe(
 
 def apply_further_transformations(
     df: pd.DataFrame,
-    max_date: str = None,
+    max_date: str | None = None,
 ) -> pd.DataFrame:
-    """
-    Apply further transformations to dataframe:
-    - add column 'localization_in_title' (boolean)
-    - filter by max_date
-    - drop duplicates
+    """Apply further transformations to dataframe:
+
+    - filter by ``max_date``
+    - drop duplicates by ``dc:identifier``
     - reset index
-    - convert openaccess column to boolean
+    - cast ``openaccess`` column to boolean
     """
     module_logger.info("Applying further transformations to dataframe.")
     df_copy = df.copy()

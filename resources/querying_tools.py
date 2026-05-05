@@ -1,68 +1,62 @@
 import re
 import unicodedata
+
 import pandas as pd
-from resources.scopus_functions import retrieve_results_from_list_of_queries
+
 from resources.country_lists import (
+    continents_demonyms,
+    continents_names,
     countries,
     demonyms,
-    continents_names,
-    continents_demonyms,
     weird_countries,
     weird_demonyms,
 )
+from resources.scopus_functions import retrieve_results_from_list_of_queries
 
 
 # Language bias tool
 def language_bias_tool(query: str) -> str:
-    """
-    Returns a query without the language restriction.
-    """
+    """Returns a query without the language restriction."""
     return re.sub(r"(AND\s)*LANGUAGE\(\w+\)", "", query)
 
 
 # Publication bias tool
 def publication_bias_tool(query: str) -> str:
-    """
-    Returns a query without the source type restriction.
-    """
+    """Returns a query without the source type restriction."""
     return re.sub(r"(AND\s)*SRCTYPE\(\w+\)", "", query)
 
 
 # Helper functions for localization bias tool
-def remove_accents_and_special_chars(text):
-    """
-    Removes accents and special characters from text.
-    """
-    text = ''.join(char for char in unicodedata.normalize('NFD', text)
-                   if unicodedata.category(char) != 'Mn')
+def remove_accents_and_special_chars(text: str) -> str:
+    """Removes accents and special characters from text."""
+    text = "".join(
+        char
+        for char in unicodedata.normalize("NFD", text)
+        if unicodedata.category(char) != "Mn"
+    )
     text = text.replace("'", " ")
-    # text = re.sub(r'\'', ' ', text)
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
     return text
 
 
 def find_localization_in_text(
     text: str,
-    list_of_locations: list[str] =
-        countries + demonyms + continents_names + continents_demonyms,
+    list_of_locations: list[str] | None = None,
 ) -> bool:
-    """
-    Returns True if any country name or demonym is found in the text.
-    """
+    """Returns True if any country name or demonym is found in the text."""
+    if list_of_locations is None:
+        list_of_locations = (
+            countries + demonyms + continents_names + continents_demonyms
+        )
     text = remove_accents_and_special_chars(text)
     text_words = text.lower().split()
-    if any(location.lower() in text_words for location in list_of_locations):
-        return True
-    else:
-        return False
+    return any(location.lower() in text_words for location in list_of_locations)
 
 
 def determine_localization_in_title(
     df: pd.DataFrame,
 ) -> pd.DataFrame:
-    """
-    Add column 'localization_in_title' (boolean)
-    """
+    """Add column 'localization_in_title' (boolean)."""
     df_copy = df.copy()
     df_copy["localization_in_title"] = df["dc:title"].apply(
         find_localization_in_text)
@@ -75,8 +69,7 @@ def scopus_query_list_constructor(
     search_field: str = "ALL",
     step: int = 20
 ):
-    """
-    Constructs a list of queries for the Scopus Search API adding all the
+    """Constructs a list of queries for the Scopus Search API adding all the
     keywords in the long_list to the initial_query.
     This process is necessary because the Scopus Search API limits the lenght
     of the query strings it accepts.
@@ -110,12 +103,11 @@ def scopus_query_list_constructor(
 def create_localized_queries(
     original_query: str,
     list_of_country_identifiers: list,
-    search_field: str = 'TITLE-ABS-KEY',
+    search_field: str = "TITLE-ABS-KEY",
     nr_identifiers_per_query: int = 20,
-    universe: list = countries+demonyms,
-) -> list:
-    """
-    This function takes a query and a list of country identifiers and returns a
+    universe: list | None = None,
+) -> dict:
+    """This function takes a query and a list of country identifiers and returns a
     list of queries, each one of which is the original query with the addition
     of a number of country identifiers. The country identifiers are taken from
     the list provided as an argument.
@@ -124,6 +116,8 @@ def create_localized_queries(
     with the addition of all the country identifiers that are not in the list
     provided as an argument.
     """
+    if universe is None:
+        universe = countries + demonyms
     list_of_localized_queries = scopus_query_list_constructor(
         initial_query=original_query,
         long_list=list_of_country_identifiers,
@@ -141,8 +135,8 @@ def create_localized_queries(
         step=nr_identifiers_per_query,
     )
     return {
-        'localized_queries': list_of_localized_queries,
-        'localized_queries_complement': list_of_localized_queries_complement,
+        "localized_queries": list_of_localized_queries,
+        "localized_queries_complement": list_of_localized_queries_complement,
     }
 
 
@@ -152,8 +146,7 @@ def localization_bias_tool(
         max_date: str,
         list_of_country_identifiers: list = weird_countries+weird_demonyms,
         ) -> pd.DataFrame:
-    """
-    This function takes a query and a list of country identifiers and returns
+    """This function takes a query and a list of country identifiers and returns
     a dataframe with the results of the query localized in the countries
     specified in the list of country identifiers, as well as in the remaining
     countries.
