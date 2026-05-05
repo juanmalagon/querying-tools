@@ -284,8 +284,12 @@ if st.checkbox("Apply availability-bias-tool"):
             data_load_state.empty()
         else:
             data_available = data_available.copy()
-            nr_open_access_records = int(data_available["openaccess"].fillna(False).astype(bool).sum())
-            availability_benchmark = safe_percentage(nr_open_access_records, len(data_available))
+            nr_open_access_records = int(
+                data_available["openaccess"].fillna(False).astype(bool).sum()
+            )
+            availability_benchmark = safe_percentage(
+                nr_open_access_records, len(data_available)
+            )
             data_load_state.text(
                 "Data loaded!\n"
                 + f"Retrieved {len(data_available)} results with the "
@@ -296,9 +300,9 @@ if st.checkbox("Apply availability-bias-tool"):
             )
 
             if st.checkbox("\t Show availability-bias-tool data records"):
-                data_available_diff = data_available[data_available["openaccess"]].reset_index(
-                    drop=True
-                )
+                data_available_diff = data_available[
+                    data_available["openaccess"]
+                ].reset_index(drop=True)
                 st.write("Availability-bias-tool data")
                 st.write(data_available_diff)
                 st.download_button(

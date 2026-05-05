@@ -9,7 +9,6 @@ from resources.scopus_functions import (
     retrieve_results_from_query,
 )
 
-
 # --- get_client ---
 
 
@@ -251,11 +250,11 @@ def test_retrieve_results_from_list_of_queries_applies_max_date():
 
 def test_retrieve_results_from_list_of_queries_empty_list_raises():
     """Empty query list leads to pd.concat on no DataFrames."""
-    with patch(
-        "resources.scopus_functions.retrieve_results_from_query"
+    with (
+        patch("resources.scopus_functions.retrieve_results_from_query"),
+        pytest.raises(ValueError, match="No objects to concatenate"),
     ):
-        with pytest.raises(ValueError, match="No objects to concatenate"):
-            retrieve_results_from_list_of_queries(
-                [],
-                max_date="2024-01-01",
-            )
+        retrieve_results_from_list_of_queries(
+            [],
+            max_date="2024-01-01",
+        )

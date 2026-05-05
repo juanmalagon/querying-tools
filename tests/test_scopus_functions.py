@@ -6,7 +6,6 @@ from resources.scopus_functions import (
     selected_columns,
 )
 
-
 # --- convert_results_to_dataframe ---
 
 def test_convert_results_to_dataframe_extracts_selected_columns():
@@ -176,7 +175,7 @@ def test_apply_further_transformations_does_not_mutate_original():
         },
     )
 
-    result = apply_further_transformations(df)
+    apply_further_transformations(df)
 
     # Original should be unchanged
     assert len(df) == 2

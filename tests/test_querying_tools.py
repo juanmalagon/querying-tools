@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pandas as pd
-import pytest
 
 from resources.querying_tools import (
     create_localized_queries,
@@ -13,7 +12,6 @@ from resources.querying_tools import (
     remove_accents_and_special_chars,
     scopus_query_list_constructor,
 )
-
 
 # --- language_bias_tool ---
 
