@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
+import resources.scopus_functions as sf
 from resources.scopus_functions import (
     get_client,
     retrieve_results_from_list_of_queries,
@@ -19,8 +20,6 @@ def test_get_client_initializes_once():
         mock_els_client_class.return_value = mock_client_instance
 
         # Patch the settings.resolve_scopus_api_key to avoid RuntimeError
-        import resources.scopus_functions as sf
-
         sf.client = None
 
         with patch.object(
@@ -36,8 +35,6 @@ def test_get_client_initializes_once():
 
 def test_get_client_passes_api_key():
     """get_client should pass the resolved API key to ElsClient."""
-    import resources.scopus_functions as sf
-
     with patch("resources.scopus_functions.ElsClient") as mock_els_client_class:
         sf.client = None
 
